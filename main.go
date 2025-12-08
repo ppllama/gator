@@ -40,6 +40,7 @@ func main() {
 
 	com.register("login", handlerLogin)
 	com.register("register", handlerRegister)
+	com.register("reset", handlerReset)
 
 	args := os.Args
 	if len(args) < 2 {
