@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"context"
+)
 
 func handlerLogin(s *state, cmd command) error {
 	
@@ -8,7 +11,12 @@ func handlerLogin(s *state, cmd command) error {
 		return fmt.Errorf("no username given")
 	}
 
-	err := s.conf.SetUser(cmd.args[0])
+	user, err := s.db.GetUser(context.Background(),cmd.args[0])
+	if err != nil {
+		return fmt.Errorf("user not found. register using gator register <name>")
+	}
+
+	err = s.conf.SetUser(user.Name)
 	if err != nil {
 		return fmt.Errorf("error setting user %w", err)
 	}

@@ -4,12 +4,16 @@ import (
 	"fmt"
 	"log"
 	"os"
-
+	"database/sql"
+	"github.com/ppllama/gator/internal/database"
 	"github.com/ppllama/gator/internal/config"
 )
 
+import _ "github.com/lib/pq"
+
 type state struct{
-	conf *config.Config
+	db		*database.Queries
+	conf	*config.Config
 }
 
 func main() {
@@ -19,8 +23,15 @@ func main() {
 	}
 	fmt.Printf("Read config: %+v\n", conf)
 
+	db, err := sql.Open("postgres", conf.Db_url)
+	if err != nil {
+		log.Fatalf("error opening postgres: %v", err)
+	}
+
+	dbQueries := database.New(db)
 	session := state{
-		conf: &conf,
+		db:		dbQueries,
+		conf:	&conf,
 	}
 
 	com := commands{
@@ -28,6 +39,7 @@ func main() {
 	}
 
 	com.register("login", handlerLogin)
+	com.register("register", handlerRegister)
 
 	args := os.Args
 	if len(args) < 2 {
@@ -41,7 +53,7 @@ func main() {
 
 	err = com.run(&session, cmd)
 	if err != nil {
-		log.Fatalf("error running command: %s\n", err)
+		log.Fatalf("error running command: %s", err)
 	}
 
 }
