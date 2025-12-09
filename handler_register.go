@@ -30,7 +30,7 @@ func handlerRegister(s *state, cmd command) error {
 	
 	user, err = s.db.CreateUser(context.Background(), userParams)
 	if err != nil {
-		return fmt.Errorf("error registering user: %v", cmd.args[0])
+		return fmt.Errorf("error registering user: %s: %v", cmd.args[0], err)
 	}
 	fmt.Printf("The user %s has been registered\n", user.Name)
 
