@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"context"
-	"github.com/ppllama/gator/internal/rssfeed"
+	"github.com/ppllama/gator/internal/rss_feed"
 )
 
 func handlerAgg(_ *state, _ command) error {
