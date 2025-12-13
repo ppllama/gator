@@ -41,6 +41,7 @@ func main() {
 	com.register("reset", handlerReset)
 	com.register("users", handlerUsers)
 	com.register("agg", handlerAgg)
+	com.register("addfeed", handlerAddfeed)
 
 	args := os.Args
 	if len(args) < 2 {
