@@ -38,5 +38,10 @@ func handlerAddfeed(s *state, cmd command) error {
 	}
 
 	fmt.Printf("%+v\n", output)
+
+	if err := CreateFeedFollow(s, output.ID); err != nil {
+		return fmt.Errorf("error creating feed follow: %v", err)
+	}
+	
 	return nil
 }
