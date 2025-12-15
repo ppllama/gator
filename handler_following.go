@@ -4,16 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ppllama/gator/internal/database"
 )
 
-func handlerFollowing(s *state, _ command) error {
+func handlerFollowing(s *state, _ command, currentUser database.User) error {
 
-	user, err := s.db.GetUser(context.Background(), s.conf.Current_user_name)
-	if err != nil {
-		return fmt.Errorf("error getting current user: %v", err)
-	}
-
-	feeds, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)
+	feeds, err := s.db.GetFeedFollowsForUser(context.Background(), currentUser.ID)
 	if err != nil {
 		return fmt.Errorf("error getting feed: %v", err)
 	}

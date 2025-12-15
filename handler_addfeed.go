@@ -9,12 +9,7 @@ import (
 	"github.com/ppllama/gator/internal/database"
 )
 
-func handlerAddfeed(s *state, cmd command) error {
-
-	current_user, err := s.db.GetUser(context.Background(), s.conf.Current_user_name)
-	if err != nil {
-		return fmt.Errorf("error getting current user: %v", err)
-	}
+func handlerAddfeed(s *state, cmd command, currentUser database.User) error {
 	
 	if len(cmd.args) < 2 {
 		return fmt.Errorf(`usage: gator addfeed <name> <url>`)
@@ -29,7 +24,7 @@ func handlerAddfeed(s *state, cmd command) error {
 		UpdatedAt: time.Now(),
 		Name: feedname,
 		Url: feedURL,
-		UserID: current_user.ID,
+		UserID: currentUser.ID,
 	}
 
 	output, err := s.db.CreateFeed(context.Background(), feed)
@@ -39,9 +34,9 @@ func handlerAddfeed(s *state, cmd command) error {
 
 	fmt.Printf("%+v\n", output)
 
-	if err := CreateFeedFollow(s, output.ID); err != nil {
+	if err := CreateFeedFollow(s, output.ID, currentUser.ID); err != nil {
 		return fmt.Errorf("error creating feed follow: %v", err)
 	}
-	
+
 	return nil
 }

@@ -41,10 +41,10 @@ func main() {
 	com.register("reset", handlerReset)
 	com.register("users", handlerUsers)
 	com.register("agg", handlerAgg)
-	com.register("addfeed", handlerAddfeed)
+	com.register("addfeed", middlewareLoggedIn(handlerAddfeed))
 	com.register("feeds", handlerFeeds)
-	com.register("follow", handlerFollow)
-	com.register("following", handlerFollowing)
+	com.register("follow", middlewareLoggedIn(handlerFollow))
+	com.register("following", middlewareLoggedIn(handlerFollowing))
 
 	args := os.Args
 	if len(args) < 2 {

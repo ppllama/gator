@@ -9,7 +9,7 @@ import (
 	"github.com/ppllama/gator/internal/database"
 )
 
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, currentUser database.User) error {
 	
 	if len(cmd.args) == 0 {
 		return fmt.Errorf("no links given")
@@ -22,25 +22,20 @@ func handlerFollow(s *state, cmd command) error {
 		return fmt.Errorf("error getting feed: %v", err)
 	}
 
-	if err := CreateFeedFollow(s, feedId); err != nil {
+	if err := CreateFeedFollow(s, feedId, currentUser.ID); err != nil {
 		return fmt.Errorf("error creating feed follow: %v", err)
 	}
 
 	return nil
 }
 
-func CreateFeedFollow(s *state, feedId uuid.UUID) error {
-
-	user, err := s.db.GetUser(context.Background(), s.conf.Current_user_name)
-	if err != nil {
-		return fmt.Errorf("error getting current user: %v", err)
-	}
+func CreateFeedFollow(s *state, feedId uuid.UUID, userID uuid.UUID) error {
 
 	feedFollowParams := database.CreateFeedFollowParams{
 		ID:			uuid.New(),
 		CreatedAt: 	time.Now(),
 		UpdatedAt: 	time.Now(),
-		UserID:		user.ID,
+		UserID:		userID,
 		FeedID:		feedId,
 	}
 
