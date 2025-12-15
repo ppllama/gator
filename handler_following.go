@@ -15,7 +15,7 @@ func handlerFollowing(s *state, _ command, currentUser database.User) error {
 	}
 	fmt.Println("you follow:")
 	for _, feed := range(feeds) {
-		fmt.Printf("%s\n", feed.Name)
+		fmt.Printf("%s\n", feed.FeedName)
 	}
 
 	return nil

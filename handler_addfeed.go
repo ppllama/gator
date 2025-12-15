@@ -35,6 +35,7 @@ func handlerAddfeed(s *state, cmd command, currentUser database.User) error {
 	fmt.Printf("%+v\n", output)
 
 	if err := CreateFeedFollow(s, output.ID, currentUser.ID); err != nil {
+		// function from handler_follow
 		return fmt.Errorf("error creating feed follow: %v", err)
 	}
 

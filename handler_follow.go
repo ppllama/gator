@@ -17,12 +17,12 @@ func handlerFollow(s *state, cmd command, currentUser database.User) error {
 
 	feedURL := cmd.args[0]
 
-	feedId, err := s.db.GetFeed(context.Background(), feedURL)
+	feed, err := s.db.GetFeed(context.Background(), feedURL)
 	if err != nil {
 		return fmt.Errorf("error getting feed: %v", err)
 	}
 
-	if err := CreateFeedFollow(s, feedId, currentUser.ID); err != nil {
+	if err := CreateFeedFollow(s, feed.ID, currentUser.ID); err != nil {
 		return fmt.Errorf("error creating feed follow: %v", err)
 	}
 
@@ -30,6 +30,7 @@ func handlerFollow(s *state, cmd command, currentUser database.User) error {
 }
 
 func CreateFeedFollow(s *state, feedId uuid.UUID, userID uuid.UUID) error {
+// Used in add_feed
 
 	feedFollowParams := database.CreateFeedFollowParams{
 		ID:			uuid.New(),
